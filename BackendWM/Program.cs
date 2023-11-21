@@ -1,11 +1,45 @@
+using BackendWM.Data;
+using BackendWM.Entities;
+using Core.Mapper;
+using Core.Services;
+using Core.Validation;
+using FluentValidation;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddDbContext<WorldMenuContext>(op => op.UseSqlServer(builder.Configuration.GetConnectionString("Database")));
+builder.Services.AddAutoMapper(typeof(IngredienteMapper));
+builder.Services.AddAutoMapper(typeof(PaisMapper));
+builder.Services.AddAutoMapper(typeof(PlatoMapper));
+builder.Services.AddValidatorsFromAssemblyContaining<IngredienteValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<PaisValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<PlatoValidator>();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularDev",
+        builder =>
+        {
+            builder.WithOrigins("http://localhost:4200")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
+
+
+builder.Services.AddTransient<IngredienteServicio>();
+builder.Services.AddTransient<PaisServicio>();
+builder.Services.AddTransient<PlatoServicio>();
 
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -14,31 +48,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
 app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+app.UseCors("AllowAngularDev");
 
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast")
-.WithOpenApi();
+app.UseAuthorization();
+
+app.MapControllers();
 
 app.Run();
-
-internal record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

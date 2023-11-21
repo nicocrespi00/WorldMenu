@@ -1,0 +1,39 @@
+<div class="d-flex justify-content-center">
+  <div class="form-group mx-sm-3 mt-3 trasparentSquad col-md-4">
+    <h2 class="d-flex justify-content-center">Crear Ingrediente</h2>
+    <form (ngSubmit)="onSubmit()">
+      <div class="form-group mx-sm-3">
+        <label for="nombre">Nombre</label>
+        <input type="text" class="form-control" id="nombre" name="nombre" [(ngModel)]="ingrediente.nombre" required>
+      </div>
+      <div class="form-group mx-sm-3">
+        <label for="caloriasX100mg">Potasio x 100 gr</label>
+        <input type="number" class="form-control" id="caloriasX100mg" name="caloriasX100mg" [(ngModel)]="ingrediente.caloriasX100mg" required>
+      </div>
+      <div class="form-group mx-sm-3">
+        <label for="fibraX100mg" class="str">Calorías x 100 gr</label>
+        <input type="number" class="form-control" id="fibraX100mg" name="fibraX100mg" [(ngModel)]="ingrediente.fibraX100mg" required>
+      </div>
+      <div class="form-group mx-sm-3">
+        <label for="potasioX100mg">Fibra x 100 gr</label>
+        <input type="number" class="form-control" id="potasioX100mg" name="potasioX100mg" [(ngModel)]="ingrediente.potasioX100mg" required>
+      </div>
+      <div class="form-group mx-sm-3 ">
+        <label for="tieneYodo">Tiene Yodo</label>
+        <input type="checkbox" class="form-check" id="tieneYodo" name="tieneYodo" [(ngModel)]="ingrediente.tieneYodo" required>
+      </div>
+      <div class="form-group mx-sm-3">
+        <label for="tieneCalcio">Tiene Calcio</label>
+        <input type="checkbox" class="form-check" id="tieneCalcio" name="tieneCalcio" [(ngModel)]="ingrediente.tieneCalcio" required>
+      </div>
+      <div class="form-group mx-sm-3">
+        <label for="potasioX100mg">Link Foto</label>
+        <input type="text" class="form-control" id="linkFoto" name="linkFoto" [(ngModel)]="ingrediente.linkFoto" required>
+      </div>
+      <div class="d-flex justify-content-between p-3">
+        <button (click)="redirectList()" class="btn btn-secondary">Cancelar</button>
+        <button type="submit" class="btn btn-success">Crear</button>
+      </div>
+    </form>
+  </div>
+</div>
